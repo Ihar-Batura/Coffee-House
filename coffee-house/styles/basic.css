@@ -494,7 +494,7 @@ a.navigation__link {
   }
 }
 .button_footer-instagram {
-  margin: 0 12px;
+  margin: 0 10px;
 }
 
 .footer__h3 {
@@ -783,7 +783,7 @@ a.navigation__link {
   }
   .about-img {
     width: 480px;
-    background-size: cover;
+    background-size: inherit;
   }
 
   .mobileApp__h2 {
