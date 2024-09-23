@@ -721,6 +721,12 @@ a.navigation__link {
   .footer__column-right {
     margin: 100px 60px 103px;
   }
+  .header__menu {
+    border: none;
+  }
+  .header__menu.active {
+    border: none;
+  }
 }
 
 @media (max-width: 758px) {
