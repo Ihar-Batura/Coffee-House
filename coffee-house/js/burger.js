@@ -1,47 +1,18 @@
-//Открывает-закрывает бургер, изменяет иконку бургера!
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("burger").addEventListener("click", function() {
-        document.querySelector(".header__hamburger").classList.toggle("active");
-        document.querySelector(".header__navigation").classList.toggle("active");
-        document.querySelector(".header__menu").classList.toggle("active");
-    });
-});
+const hamburger = document.querySelector('.header__hamburger');
+const navigation = document.querySelector('.header__navigation');
+const menu = document.querySelector('.header__menu');
+const burgerBtn = document.getElementById('burger');
+const menuLinks = document.querySelectorAll('.navigation__link');
 
-//Открывает-закрывает бургер при переходе по ссылке меню!
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("link-1").addEventListener("click", function() {
-        document.querySelector(".header__hamburger").classList.toggle("active");
-        document.querySelector(".header__navigation").classList.toggle("active");
-        document.querySelector(".header__menu").classList.toggle("active");
-    });
-});
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("link-2").addEventListener("click", function() {
-        document.querySelector(".header__hamburger").classList.toggle("active");
-        document.querySelector(".header__navigation").classList.toggle("active");
-        document.querySelector(".header__menu").classList.toggle("active");
-    });
-});
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("link-3").addEventListener("click", function() {
-        document.querySelector(".header__hamburger").classList.toggle("active");
-        document.querySelector(".header__navigation").classList.toggle("active");
-        document.querySelector(".header__menu").classList.toggle("active");
-    });
-});
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("link-4").addEventListener("click", function() {
-        document.querySelector(".header__hamburger").classList.toggle("active");
-        document.querySelector(".header__navigation").classList.toggle("active");
-        document.querySelector(".header__menu").classList.toggle("active");
-    });
-});
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("link-5").addEventListener("click", function() {
-        document.querySelector(".header__hamburger").classList.toggle("active");
-        document.querySelector(".header__navigation").classList.toggle("active");
-        document.querySelector(".header__menu").classList.toggle("active");
-    });
-});
+// Open and Close burger menu
 
+function openBurger() {
+  hamburger.classList.toggle('active');
+  navigation.classList.toggle('active');
+  menu.classList.toggle('active');
+}
 
+burgerBtn.addEventListener('click', openBurger);
+menuLinks.forEach((link) => {
+  link.addEventListener('click', openBurger);
+});

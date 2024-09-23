@@ -744,6 +744,10 @@ a.navigation__link {
   .window__info-box {
     max-width: 330px;
   }
+
+  .header__menu {
+    border: none;
+  }
 }
 
 @media (max-width: 760px) {
