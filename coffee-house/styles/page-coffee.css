@@ -580,9 +580,7 @@ a.navigation__link {
   .layout-2-column {
     flex-direction: column;
   }
-  .layout-2-column.active {
-    margin-top: 100px;
-  }
+
   .footer__wrapper {
     margin: 0 auto 40px;
   }
