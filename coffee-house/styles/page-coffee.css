@@ -286,41 +286,53 @@ a.navigation__link {
 .coffee__card-8.tea {
   display: none;
 }
-.coffee__card-1.tea .card__img-1 {
+.coffee__card-1.tea .card__img-1,
+.card__img-1.tea {
   background-image: url(../assets/images/tea-1.svg);
 }
-.coffee__card-2.tea .card__img-2 {
+.coffee__card-2.tea .card__img-2,
+.card__img-2.tea {
   background-image: url(../assets/images/tea-2.svg);
 }
-.coffee__card-3.tea .card__img-3 {
+.coffee__card-3.tea .card__img-3,
+.card__img-3.tea {
   background-image: url(../assets/images/tea-3.svg);
 }
-.coffee__card-4.tea .card__img-4 {
+.coffee__card-4.tea .card__img-4,
+.card__img-4.tea {
   background-image: url(../assets/images/tea-4.svg);
 }
 
-.coffee__card-1.dessert .card__img-1 {
+.coffee__card-1.dessert .card__img-1,
+.card__img-1.dessert {
   background-image: url(../assets/images/dessert-1.svg);
 }
-.coffee__card-2.dessert .card__img-2 {
+.coffee__card-2.dessert .card__img-2,
+.card__img-2.dessert {
   background-image: url(../assets/images/dessert-2.svg);
 }
-.coffee__card-3.dessert .card__img-3 {
+.coffee__card-3.dessert .card__img-3,
+.card__img-3.dessert {
   background-image: url(../assets/images/dessert-3.svg);
 }
-.coffee__card-4.dessert .card__img-4 {
+.coffee__card-4.dessert .card__img-4,
+.card__img-4.dessert {
   background-image: url(../assets/images/dessert-4.svg);
 }
-.coffee__card-5.dessert .card__img-5 {
+.coffee__card-5.dessert .card__img-5,
+.card__img-5.dessert {
   background-image: url(../assets/images/dessert-5.svg);
 }
-.coffee__card-6.dessert .card__img-6 {
+.coffee__card-6.dessert .card__img-6,
+.card__img-6.dessert {
   background-image: url(../assets/images/dessert-6.svg);
 }
-.coffee__card-7.dessert .card__img-7 {
+.coffee__card-7.dessert .card__img-7,
+.card__img-7.dessert {
   background-image: url(../assets/images/dessert-7.svg);
 }
-.coffee__card-8.dessert .card__img-8 {
+.coffee__card-8.dessert .card__img-8,
+.card__img-8.dessert {
   background-image: url(../assets/images/dessert-8.svg);
 }
 
@@ -328,7 +340,7 @@ a.navigation__link {
   display: flex;
   flex-direction: column;
   max-width: 270px;
-  margin: 21px 20px 19px;
+  margin: 21px 19px 19px;
   height: 156px;
 }
 
@@ -492,7 +504,7 @@ a.navigation__link {
   width: 100%;
   max-width: 310px;
   max-height: 310px;
-  background-image: url(../assets/images/coffee-1.svg);
+
   border-radius: 40px;
   background-position: center;
   background-size: 110%;
@@ -533,21 +545,37 @@ a.navigation__link {
   line-height: 150%;
   background-color: transparent;
   margin: 7px 8px 0 0;
+  transition: all 0.7s ease;
 }
 .modal__button.active {
   color: #e1d4c9;
   background-color: #665f55;
 }
-.modal__button-svg {
+.modal__button-icon {
   width: 30px;
   height: 30px;
   background: #c1b6ad;
   border-radius: 15px;
-  padding: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #403f3d;
+  padding-top: 3px;
 }
-.modal__button-svg.active {
+.modal__button-icon.active {
   background: #e1d4c9;
 }
+
+@media (hover: hover) {
+  .modal__button:hover {
+    background-color: #665f55;
+    color: #e1d4c9;
+  }
+  .modal__button:hover > p {
+    background: #e1d4c9;
+  }
+}
+
 .total__box {
   display: flex;
   justify-content: space-between;
