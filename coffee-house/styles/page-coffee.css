@@ -208,6 +208,10 @@ a.navigation__link {
     background: #e1d4c9;
   }
 }
+
+.button_transparent.active > img {
+  background: #e1d4c9;
+}
 .button_transparent__img {
   padding: 7px;
   border-radius: 100px;

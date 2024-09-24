@@ -1,4 +1,5 @@
-[
+{
+  "Coffee": [
     {
       "name": "Irish coffee",
       "description": "Fragrant black coffee with Jameson Irish whiskey and whipped milk",
@@ -33,7 +34,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Kahlua coffee",
       "description": "Classic coffee with milk and Kahlua liqueur under a cap of frothed milk",
@@ -68,7 +69,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Honey raf",
       "description": "Espresso with frothed milk, cream and aromatic honey",
@@ -103,7 +104,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Ice cappuccino",
       "description": "Cappuccino with soft thick foam in summer version with ice",
@@ -138,7 +139,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Espresso",
       "description": "Classic black coffee",
@@ -173,7 +174,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Latte",
       "description": "Espresso coffee with the addition of steamed milk and dense milk foam",
@@ -208,7 +209,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Latte macchiato",
       "description": "Espresso with frothed milk and chocolate",
@@ -243,7 +244,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Coffee with cognac",
       "description": "Fragrant black coffee with cognac and whipped cream",
@@ -277,8 +278,9 @@
           "add-price": "0.50"
         }
       ]
-    },
-  
+    }
+  ],
+  "Tea": [
     {
       "name": "Moroccan",
       "description": "Fragrant black tea with the addition of tangerine, cinnamon, honey, lemon and mint",
@@ -313,7 +315,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Ginger",
       "description": "Original black tea with fresh ginger, lemon and honey",
@@ -348,7 +350,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Cranberry",
       "description": "Invigorating black tea with cranberry and honey",
@@ -383,7 +385,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Sea buckthorn",
       "description": "Toning sweet black tea with sea buckthorn, fresh thyme and cinnamon",
@@ -417,8 +419,9 @@
           "add-price": "0.50"
         }
       ]
-    },
-  
+    }
+  ],
+  "Dessert": [
     {
       "name": "Marble cheesecake",
       "description": "Philadelphia cheese with lemon zest on a light sponge cake and red currant jam",
@@ -453,7 +456,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Red velvet",
       "description": "Layer cake with cream cheese frosting",
@@ -488,7 +491,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Cheesecakes",
       "description": "Soft cottage cheese pancakes with sour cream and fresh berries and sprinkled with powdered sugar",
@@ -523,7 +526,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Creme brulee",
       "description": "Delicate creamy dessert in a caramel basket with wild berries",
@@ -558,7 +561,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Pancakes",
       "description": "Tender pancakes with strawberry jam and fresh strawberries",
@@ -593,7 +596,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Honey cake",
       "description": "Classic honey cake with delicate custard",
@@ -628,7 +631,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Chocolate cake",
       "description": "Cake with hot chocolate filling and nuts with dried apricots",
@@ -663,7 +666,7 @@
         }
       ]
     },
-  
+
     {
       "name": "Black forest",
       "description": "A combination of thin sponge cake with cherry jam and light chocolate mousse",
@@ -699,3 +702,4 @@
       ]
     }
   ]
+}
