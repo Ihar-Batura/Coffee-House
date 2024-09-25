@@ -116,7 +116,6 @@ function closeModal() {
 
 cardsList.forEach((card) => {
   card.addEventListener('click', () => {
-    // console.log(array);
     const classImg = card.childNodes[1].classList[1]; // нужная нам картинка
     const title = card.childNodes[3].firstChild.nextElementSibling.innerText; // заголовок карточки он нам нужен для подтягивания остальной информации в модальное окно
     openModal();
@@ -144,7 +143,6 @@ let startModalCost;
 
 // функция принимает на вход начзавние товара и массив с категорией товаров. Проходится по массиву и находит нужные данные через название товара
 function createModal(title, array) {
-  console.log(array);
   let description;
   let sizeSmall;
   let sizeMedium;
@@ -176,14 +174,8 @@ function createModal(title, array) {
       startModalCost = priceSizeSmall;
     }
   }
-  // console.log(priceSizeSmall);
-  // console.log(priceSizeMedium);
-  // console.log(priceSizeLarge);
-  // console.log(priceAdditiveOne);
-  // console.log(priceAdditiveTwo);
-  // console.log(priceAdditiveThree);
 
-  const modalWrapper = document.querySelector('.modal__window');
+  const modalWrapper = document.querySelector('.modal__wrapper');
   const modalWindow = document.createElement('div');
   modalWindow.className = 'modal__window';
   modalWindow.innerHTML = `
@@ -349,3 +341,15 @@ function changePrice(action = '+', number) {
 
   totalPrice.innerText = `$${cost}`;
 }
+
+// Закрытие модального окна при нажатии на затемнение
+
+const closeShadow = document.querySelector('.modal__wrapper');
+closeShadow.addEventListener('click', (event) => {
+  // Проверяет на тот ли я элемент нажал!
+  if (event.target.classList.contains('modal__wrapper')) {
+    closeModal();
+    const modalWrapper = document.querySelector('.modal__wrapper');
+    modalWrapper.innerHTML = '';
+  }
+});
