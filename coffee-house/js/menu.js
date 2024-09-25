@@ -62,8 +62,9 @@ function addClass(name) {
 // меняет содержимое катрочки товара
 
 // получаем категорию и запрашиваем нужный нам массив
-async function getData(name) {
-  let array;
+let array; // массив с информацией о товарах на открытой странице
+
+async function getData(name = 'Coffee') {
   const quotes = '../data/products.json';
   const result = await fetch(quotes);
   const data = await result.json();
@@ -75,7 +76,9 @@ async function getData(name) {
     array = data.Dessert;
   }
   changeCardText(array);
+  //createModal(array); // прокидываем массив в сборку мадального окна что бы подтягивать ниформацию
 }
+getData();
 
 // логика получаем массив с необходимой категорией, проходимся по карточкам и меняем содержимое
 function changeCardText(data) {
@@ -113,9 +116,11 @@ function closeModal() {
 
 cardsList.forEach((card) => {
   card.addEventListener('click', () => {
-    const classImg = card.childNodes[1].classList;
+    // console.log(array);
+    const classImg = card.childNodes[1].classList[1]; // нужная нам картинка
+    const title = card.childNodes[3].firstChild.nextElementSibling.innerText; // заголовок карточки он нам нужен для подтягивания остальной информации в модальное окно
     openModal();
-    createModal();
+    createModal(title, array);
     addImgToModal(classImg);
   });
 });
@@ -125,33 +130,54 @@ function addImgToModal(classImg) {
   if (isTeaOrDessert) {
     modalImg.classList.add(isTeaOrDessert);
   }
-  modalImg.classList.add(classImg[1]);
+  modalImg.classList.add(classImg);
 }
 
-function createModal() {
+// функция принимает на вход начзавние товара и массив с категорией товаров. Проходится по массиву и находит нужные данные через название товара
+function createModal(title, array) {
+  let description;
+  let sizeSmall;
+  let sizeMedium;
+  let sizeLarge;
+  let additiveOne;
+  let additiveTwo;
+  let additiveThree;
+  let total;
+
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].name === title) {
+      description = array[i].description;
+      sizeSmall = array[i].sizes.s.size;
+      sizeMedium = array[i].sizes.m.size;
+      sizeLarge = array[i].sizes.l.size;
+      additiveOne = array[i].additives[0].name;
+      additiveTwo = array[i].additives[1].name;
+      additiveThree = array[i].additives[2].name;
+      total = array[i].price;
+    }
+  }
+
   const modalWrapper = document.querySelector('.modal__window');
   const modalWindow = document.createElement('div');
   modalWindow.className = 'modal__window';
   modalWindow.innerHTML = `
         <div class="modal__img"></div>
           <div class="window__info-box">
-            <h3 class="h3">Irish coffee</h3>
-            <p class="modal__text modal__text-main">
-              Fragrant black coffee with Jameson Irish whiskey and whipped milk
-            </p>
+            <h3 class="h3">${title}</h3>
+            <p class="modal__text modal__text-main"> ${description} </p>
             <p class="modal__text modal__text-choice">Size</p>
             <div class="window__button-box">
               <button class="modal__button active">
                 <p class="modal__button-icon active">S</p>
-                200 ml
+                ${sizeSmall}
               </button>
               <button class="modal__button">
                 <p class="modal__button-icon ">M</p>
-                300 ml
+                ${sizeMedium}
               </button>
               <button class="modal__button">
                 <p class="modal__button-icon ">L</p>
-                400 ml
+                ${sizeLarge}
               </button>
             </div>
             <p class="modal__text modal__text-choice text-choice__2">
@@ -160,20 +186,20 @@ function createModal() {
             <div class="window__button-box">
               <button class="modal__button">
                 <p class="modal__button-icon ">1</p>
-                Sugar
+               ${additiveOne}
               </button>
               <button class="modal__button">
                 <p class="modal__button-icon ">2</p>
-                Cinnamon
+                ${additiveTwo}
               </button>
               <button class="modal__button">
                 <p class="modal__button-icon ">3</p>
-                Syrup
+                ${additiveThree}
               </button>
             </div>
             <div class="total__box">
               <h3 class="h3">Total:</h3>
-              <h3 class="h3">$7.00</h3>
+              <h3 class="h3">$${total}</h3>
             </div>
             <div class="info-box">
               <img
