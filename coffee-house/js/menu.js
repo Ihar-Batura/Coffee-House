@@ -133,8 +133,18 @@ function addImgToModal(classImg) {
   modalImg.classList.add(classImg);
 }
 
+// переменные для изменения цены и добавления добавок
+let priceSizeSmall;
+let priceSizeMedium;
+let priceSizeLarge;
+let priceAdditiveOne;
+let priceAdditiveTwo;
+let priceAdditiveThree;
+let startModalCost;
+
 // функция принимает на вход начзавние товара и массив с категорией товаров. Проходится по массиву и находит нужные данные через название товара
 function createModal(title, array) {
+  console.log(array);
   let description;
   let sizeSmall;
   let sizeMedium;
@@ -154,8 +164,24 @@ function createModal(title, array) {
       additiveTwo = array[i].additives[1].name;
       additiveThree = array[i].additives[2].name;
       total = array[i].price;
+
+      // получили цены на добавки
+      priceSizeSmall = array[i].sizes.s['add-price'];
+      priceSizeMedium = array[i].sizes.m['add-price'];
+      priceSizeLarge = array[i].sizes.l['add-price'];
+      priceAdditiveOne = array[i].additives[0]['add-price'];
+      priceAdditiveTwo = array[i].additives[1]['add-price'];
+      priceAdditiveThree = array[i].additives[2]['add-price'];
+
+      startModalCost = priceSizeSmall;
     }
   }
+  // console.log(priceSizeSmall);
+  // console.log(priceSizeMedium);
+  // console.log(priceSizeLarge);
+  // console.log(priceAdditiveOne);
+  // console.log(priceAdditiveTwo);
+  // console.log(priceAdditiveThree);
 
   const modalWrapper = document.querySelector('.modal__window');
   const modalWindow = document.createElement('div');
@@ -167,15 +193,15 @@ function createModal(title, array) {
             <p class="modal__text modal__text-main"> ${description} </p>
             <p class="modal__text modal__text-choice">Size</p>
             <div class="window__button-box">
-              <button class="modal__button active">
+              <button class="modal__button active btn-size">
                 <p class="modal__button-icon active">S</p>
                 ${sizeSmall}
               </button>
-              <button class="modal__button">
+              <button class="modal__button btn-size">
                 <p class="modal__button-icon ">M</p>
                 ${sizeMedium}
               </button>
-              <button class="modal__button">
+              <button class="modal__button btn-size">
                 <p class="modal__button-icon ">L</p>
                 ${sizeLarge}
               </button>
@@ -199,7 +225,7 @@ function createModal(title, array) {
             </div>
             <div class="total__box">
               <h3 class="h3">Total:</h3>
-              <h3 class="h3">$${total}</h3>
+              <h3 class="h3 total-price">$${total}</h3>
             </div>
             <div class="info-box">
               <img
@@ -225,4 +251,65 @@ function createModal(title, array) {
     closeModal();
     modalWrapper.innerHTML = '';
   });
+
+  // кнопки модального окна
+  const modalBtnsSizes = document.querySelectorAll('.btn-size');
+
+  // modalBtnsSizes.forEach((btnSize) => {
+  //   btnSize.classList.remove('active');
+  //   btnSize.childNodes[1].classList.remove('active');
+  //   btnSize.addEventListener('click', () => {
+  //     btnSize.classList.add('active');
+  //     btnSize.childNodes[1].classList.add('active');
+  //   });
+  // });
+
+  modalBtnsSizes.forEach((btnSize) => {
+    btnSize.addEventListener('click', () => {
+      deleteActiveBtnSize();
+      changePrice('-', startModalCost); // удаляет разницу последнего выбранного товара
+      btnSize.classList.add('active');
+      btnSize.childNodes[1].classList.add('active');
+      const addPrice = addPriceToTotale(btnSize.childNodes[1].innerText); // возвращает сумму которую нужно добавить к цене при изменеии обьема стакана
+      startModalCost = addPrice; // сохраняем в переменную последнюю разницу
+      changePrice('+', +addPrice); // изменяем прайс
+    });
+  });
+
+  function deleteActiveBtnSize() {
+    modalBtnsSizes.forEach((btnSize) => {
+      btnSize.classList.remove('active');
+      btnSize.childNodes[1].classList.remove('active');
+    });
+  }
+
+  function addPriceToTotale(size) {
+    if (size === 'S') {
+      return priceSizeSmall;
+    } else if (size === 'M') {
+      return priceSizeMedium;
+    } else if (size === 'L') {
+      return priceSizeLarge;
+    }
+  }
+}
+
+function changePrice(action = '+', number) {
+  const totalPrice = document.querySelector('.total-price');
+  let cost = totalPrice.innerText.replace(/[$]/g, '');
+  if (action === '+') {
+    cost = +cost + number;
+  } else {
+    cost = +cost - number;
+  }
+
+  if (cost.toString().includes('.')) {
+    if (cost.toString().split('.')[1].length === 1) {
+      cost = cost + '0';
+    }
+  } else {
+    cost = cost + '.00';
+  }
+
+  totalPrice.innerText = `$${cost}`;
 }
