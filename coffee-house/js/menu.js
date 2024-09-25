@@ -1,202 +1,355 @@
-// Загрузка дополнительных карточек 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("download").addEventListener("click", function() {
-        document.querySelector(".coffee__card-5").classList.toggle("active");
-        document.querySelector(".coffee__card-6").classList.toggle("active");
-        document.querySelector(".coffee__card-7").classList.toggle("active");
-        document.querySelector(".coffee__card-8").classList.toggle("active");
-        document.querySelector(".button__refresh").classList.toggle("active");
-        document.querySelector(".layout-2-column").classList.toggle("active");
+const cardsList = document.querySelectorAll('.coffee__card');
+const buttonsList = document.querySelectorAll('.button_transparent');
+const downloadBtn = document.querySelector('.button__refresh');
+let isTeaOrDessert;
+
+// Загрузка дополнительных карточек
+function downloadCards() {
+  cardsList.forEach((card) => card.classList.add('active'));
+  downloadBtn.classList.add('active');
+}
+
+downloadBtn.addEventListener('click', downloadCards);
+
+function changeCategory(category) {
+  if (category !== 'Tea' && category !== 'Dessert') {
+    deleteClass();
+    cardsList.forEach((card) => card.classList.remove('active'));
+    downloadBtn.classList.remove('active'); // включает кнопку дополнительной загрузки
+    isTeaOrDessert = null;
+  } else {
+    // отключает кнопку дополнительной загрузки в категории чай и включает в остальных
+    if (category === 'Tea') {
+      downloadBtn.classList.add('active');
+      cardsList.forEach((card) => card.classList.remove('active'));
+      isTeaOrDessert = 'tea';
+    } else {
+      downloadBtn.classList.remove('active'); // включает кнопку дополнительной загрузки
+      cardsList.forEach((card) => card.classList.remove('active'));
+      isTeaOrDessert = 'dessert';
+    }
+    deleteClass();
+    addClass(category);
+  }
+}
+
+// Меняет внешний вид кнопки при нажатии
+buttonsList.forEach((button) => {
+  button.addEventListener('click', () => {
+    buttonsList.forEach((btn) => {
+      btn.classList.remove('active');
     });
+    button.classList.add('active');
+    changeCategory(button.innerText); //
+    getData(button.innerText); // get api need category array
+  });
 });
 
-// Переменные для карточек
-const cardName1 = document.getElementById('cardName-1');
-const cardName2 = document.getElementById('cardName-2');
-const cardName3 = document.getElementById('cardName-3');
-const cardName4 = document.getElementById('cardName-4');
-const cardName5 = document.getElementById('cardName-5');
-const cardName6 = document.getElementById('cardName-6');
-const cardName7 = document.getElementById('cardName-7');
-const cardName8 = document.getElementById('cardName-8');
+// удаляет все классы у карточки товара
+function deleteClass() {
+  cardsList.forEach((card) => {
+    card.classList.remove('tea', 'dessert');
+  });
+}
 
-const cardText1 = document.getElementById('cardText-1');
-const cardText2 = document.getElementById('cardText-2');
-const cardText3 = document.getElementById('cardText-3');
-const cardText4 = document.getElementById('cardText-4');
-const cardText5 = document.getElementById('cardText-5');
-const cardText6 = document.getElementById('cardText-6');
-const cardText7 = document.getElementById('cardText-7');
-const cardText8 = document.getElementById('cardText-8');
+// добавляет нужный класс к катрочке товара
+function addClass(name) {
+  cardsList.forEach((card) => {
+    card.classList.add(name.toLowerCase());
+  });
+}
 
-const carPrice1 = document.getElementById('carPrice-1');
-const carPrice2 = document.getElementById('carPrice-2');
-const carPrice3 = document.getElementById('carPrice-3');
-const carPrice4 = document.getElementById('carPrice-4');
-const carPrice5 = document.getElementById('carPrice-5');
-const carPrice6 = document.getElementById('carPrice-6');
-const carPrice7 = document.getElementById('carPrice-7');
-const carPrice8 = document.getElementById('carPrice-8');
+// меняет содержимое катрочки товара
 
-// Переключение кнопок меню с категориями 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("buttonCoffee").addEventListener("click", function() {
-        document.getElementById("buttonCoffee").classList.toggle("active");
-        document.getElementById("backImg-1").classList.toggle("active");
-        document.getElementById("backImg-2").classList.remove("active");
-        document.getElementById("backImg-3").classList.remove("active");
-        document.getElementById("buttonTea").classList.remove("active");
-        document.getElementById("buttonDessert").classList.remove("active");
+// получаем категорию и запрашиваем нужный нам массив
+let array; // массив с информацией о товарах на открытой странице
 
-        // Удаление классов tea and dessert
-        document.getElementById("card-1").classList.remove("tea", "dessert");
-        document.getElementById("card-2").classList.remove("tea", "dessert");
-        document.getElementById("card-3").classList.remove("tea", "dessert");
-        document.getElementById("card-4").classList.remove("tea", "dessert");
-        document.getElementById("card-5").classList.remove("tea", "dessert");
-        document.getElementById("card-6").classList.remove("tea", "dessert");
-        document.getElementById("card-7").classList.remove("tea", "dessert");
-        document.getElementById("card-8").classList.remove("tea", "dessert");
+async function getData(name = 'Coffee') {
+  const quotes = '../data/products.json';
+  const result = await fetch(quotes);
+  const data = await result.json();
+  if (name === 'Coffee') {
+    array = data.Coffee;
+  } else if (name === 'Tea') {
+    array = data.Tea;
+  } else if (name === 'Dessert') {
+    array = data.Dessert;
+  }
+  changeCardText(array);
+  //createModal(array); // прокидываем массив в сборку мадального окна что бы подтягивать ниформацию
+}
+getData();
 
-        // Изменяем техт в карточках
-        cardName1.textContent = "Irish coffee";
-        cardName2.textContent = "Kahlua coffee";
-        cardName3.textContent = "Honey raf";
-        cardName4.textContent = "Ice cappuccino";
-        cardName5.textContent = "Espresso";
-        cardName6.textContent = "Latte";
-        cardName7.textContent = "Latte macchiato";
-        cardName8.textContent = "Coffee with cognac";
+// логика получаем массив с необходимой категорией, проходимся по карточкам и меняем содержимое
+function changeCardText(data) {
+  for (let i = 0; i < data.length; i++) {
+    const cardTextChildren = cardsList[i].childNodes[3].children;
+    for (let j = 0; j < cardTextChildren.length; j++) {
+      if (j === 0) {
+        cardTextChildren[j].innerText = data[i].name;
+      }
+      if (j === 1) {
+        cardTextChildren[j].innerText = data[i].description;
+      }
+      if (j === 2) {
+        cardTextChildren[j].innerText = `$${data[i].price}`;
+      }
+    }
+  }
+}
 
-        cardText1.textContent = "Fragrant black coffee with Jameson Irish whiskey and whipped milk";
-        cardText2.textContent = "Classic coffee with milk and Kahlua liqueur under a cap of frothed milk";
-        cardText3.textContent = "Espresso with frothed milk, cream and aromatic honey";
-        cardText4.textContent = "Cappuccino with soft thick foam in summer version with ice";
-        cardText5.textContent = "Classic black coffee";
-        cardText6.textContent = "Espresso coffee with the addition of steamed milk and dense milk foam";
-        cardText7.textContent = "Espresso with frothed milk and chocolate";
-        cardText8.textContent = "Fragrant black coffee with cognac and whipped cream";
+/* MODAL WINDOW */
 
-        carPrice1.textContent = "$7.00";
-        carPrice2.textContent = "$7.00";
-        carPrice3.textContent = "$5.50";
-        carPrice4.textContent = "$5.00";
-        carPrice5.textContent = "$4.50";
-        carPrice6.textContent = "$4.50";
-        carPrice7.textContent = "$5.50";
-        carPrice8.textContent = "$6.50";
-    });
+//Открытие модального окна
+const modal = document.querySelector('.modal');
+const body = document.querySelector('.body');
+
+function openModal() {
+  modal.classList.add('active');
+  body.classList.add('active');
+}
+
+function closeModal() {
+  modal.classList.remove('active');
+  body.classList.remove('active');
+}
+
+cardsList.forEach((card) => {
+  card.addEventListener('click', () => {
+    const classImg = card.childNodes[1].classList[1]; // нужная нам картинка
+    const title = card.childNodes[3].firstChild.nextElementSibling.innerText; // заголовок карточки он нам нужен для подтягивания остальной информации в модальное окно
+    openModal();
+    createModal(title, array);
+    addImgToModal(classImg);
+  });
 });
 
+function addImgToModal(classImg) {
+  const modalImg = document.querySelector('.modal__img');
+  if (isTeaOrDessert) {
+    modalImg.classList.add(isTeaOrDessert);
+  }
+  modalImg.classList.add(classImg);
+}
 
+// переменные для изменения цены и добавления добавок
+let priceSizeSmall;
+let priceSizeMedium;
+let priceSizeLarge;
+let priceAdditiveOne;
+let priceAdditiveTwo;
+let priceAdditiveThree;
+let startModalCost;
 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("buttonTea").addEventListener("click", function() {
-        document.getElementById("buttonCoffee").classList.remove("active");
-        document.getElementById("buttonTea").classList.toggle("active");
-        document.getElementById("backImg-2").classList.toggle("active");
-        document.getElementById("backImg-1").classList.remove("active");
-        document.getElementById("backImg-3").classList.remove("active");
-        document.getElementById("buttonDessert").classList.remove("active");
+// функция принимает на вход начзавние товара и массив с категорией товаров. Проходится по массиву и находит нужные данные через название товара
+function createModal(title, array) {
+  let description;
+  let sizeSmall;
+  let sizeMedium;
+  let sizeLarge;
+  let additiveOne;
+  let additiveTwo;
+  let additiveThree;
+  let total;
 
-        // Удаление класса dessert и добавление tea
-        document.getElementById("card-1").classList.add("tea");
-        document.getElementById("card-2").classList.add("tea");
-        document.getElementById("card-3").classList.add("tea");
-        document.getElementById("card-4").classList.add("tea");
-        document.getElementById("card-5").classList.add("tea");
-        document.getElementById("card-6").classList.add("tea");
-        document.getElementById("card-7").classList.add("tea");
-        document.getElementById("card-8").classList.add("tea");
-        document.getElementById("card-1").classList.remove("dessert");
-        document.getElementById("card-2").classList.remove("dessert");
-        document.getElementById("card-3").classList.remove("dessert");
-        document.getElementById("card-4").classList.remove("dessert");
-        document.getElementById("card-5").classList.remove("dessert");
-        document.getElementById("card-6").classList.remove("dessert");
-        document.getElementById("card-7").classList.remove("dessert");
-        document.getElementById("card-8").classList.remove("dessert");
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].name === title) {
+      description = array[i].description;
+      sizeSmall = array[i].sizes.s.size;
+      sizeMedium = array[i].sizes.m.size;
+      sizeLarge = array[i].sizes.l.size;
+      additiveOne = array[i].additives[0].name;
+      additiveTwo = array[i].additives[1].name;
+      additiveThree = array[i].additives[2].name;
+      total = array[i].price;
 
-        document.getElementById("download").classList.add("hidden");
+      // получили цены на добавки
+      priceSizeSmall = array[i].sizes.s['add-price'];
+      priceSizeMedium = array[i].sizes.m['add-price'];
+      priceSizeLarge = array[i].sizes.l['add-price'];
+      priceAdditiveOne = array[i].additives[0]['add-price'];
+      priceAdditiveTwo = array[i].additives[1]['add-price'];
+      priceAdditiveThree = array[i].additives[2]['add-price'];
 
-        // Изменяем техт в карточках
-        cardName1.textContent = "Moroccan";
-        cardName2.textContent = "Ginger";
-        cardName3.textContent = "Cranberry";
-        cardName4.textContent = "Sea buckthorn";
+      startModalCost = priceSizeSmall;
+    }
+  }
 
-        cardText1.textContent = "Fragrant black tea with the addition of tangerine, cinnamon, honey, lemon and mint";
-        cardText2.textContent = "Original black tea with fresh ginger, lemon and honey";
-        cardText3.textContent = "Invigorating black tea with cranberry and honey";
-        cardText4.textContent = "Toning sweet black tea with sea buckthorn, fresh thyme and cinnamon";
+  const modalWrapper = document.querySelector('.modal__wrapper');
+  const modalWindow = document.createElement('div');
+  modalWindow.className = 'modal__window';
+  modalWindow.innerHTML = `
+        <div class="modal__img"></div>
+          <div class="window__info-box">
+            <h3 class="h3">${title}</h3>
+            <p class="modal__text modal__text-main"> ${description} </p>
+            <p class="modal__text modal__text-choice">Size</p>
+            <div class="window__button-box">
+              <button class="modal__button active btn-size">
+                <p class="modal__button-icon active">S</p>
+                ${sizeSmall}
+              </button>
+              <button class="modal__button btn-size">
+                <p class="modal__button-icon ">M</p>
+                ${sizeMedium}
+              </button>
+              <button class="modal__button btn-size">
+                <p class="modal__button-icon ">L</p>
+                ${sizeLarge}
+              </button>
+            </div>
+            <p class="modal__text modal__text-choice text-choice__2">
+              Additives
+            </p>
+            <div class="window__button-box">
+              <button class="modal__button btn-addit">
+                <p class="modal__button-icon ">1</p>
+               ${additiveOne}
+              </button>
+              <button class="modal__button btn-addit">
+                <p class="modal__button-icon ">2</p>
+                ${additiveTwo}
+              </button>
+              <button class="modal__button btn-addit">
+                <p class="modal__button-icon ">3</p>
+                ${additiveThree}
+              </button>
+            </div>
+            <div class="total__box">
+              <h3 class="h3">Total:</h3>
+              <h3 class="h3 total-price">$${total}</h3>
+            </div>
+            <div class="info-box">
+              <img
+                class="info-box__logo"
+                src="../assets/icons/info-empty.svg"
+                alt="logo info"
+              />
+              <p class="info-box__text">
+                The cost is not final. Download our mobile app to see the final
+                price and place your order. Earn loyalty points and enjoy your
+                favorite coffee with up to 20% discount.
+              </p>
+            </div>
+            <button class="modal__button modal__button-main btn-close">Close</button>
+          </div>
+`;
+  modalWrapper.appendChild(modalWindow);
 
-        carPrice1.textContent = "$4.50";
-        carPrice2.textContent = "$5.00";
-        carPrice3.textContent = "$5.00";
-        carPrice4.textContent = "$5.50";
-        
+  //Закрытие модального окна через кнопку!
+  const btnClose = document.querySelector('.btn-close');
+
+  btnClose.addEventListener('click', () => {
+    closeModal();
+    modalWrapper.innerHTML = '';
+  });
+
+  // кнопки модального окна
+  const modalBtnsSizes = document.querySelectorAll('.btn-size');
+  const modalBtnsAdditives = document.querySelectorAll('.btn-addit');
+  let isFirstAddit = false;
+  let isSecondAddit = false;
+  let isThirdAddit = false;
+
+  modalBtnsAdditives.forEach((btnAddit) => {
+    btnAddit.addEventListener('click', () => {
+      btnAddit.classList.toggle('active');
+      btnAddit.childNodes[1].classList.toggle('active');
+      let numberBtn = btnAddit.childNodes[1].innerText;
+      const additivePrice = addAdditivesPrice(numberBtn);
+      if (numberBtn === '1') {
+        if (!isFirstAddit) {
+          changePrice('+', +additivePrice); // изменяем прайс
+        } else {
+          changePrice('-', +additivePrice); // изменяем прайс
+        }
+        isFirstAddit = !isFirstAddit;
+      } else if (numberBtn === '2') {
+        if (!isSecondAddit) {
+          changePrice('+', +additivePrice); // изменяем прайс
+        } else {
+          changePrice('-', +additivePrice); // изменяем прайс
+        }
+        isSecondAddit = !isSecondAddit;
+      } else if (numberBtn === '3') {
+        if (!isThirdAddit) {
+          changePrice('+', +additivePrice); // изменяем прайс
+        } else {
+          changePrice('', +additivePrice); // изменяем прайс
+        }
+        isThirdAddit = !isThirdAddit;
+      }
     });
-});
+  });
 
+  function addAdditivesPrice(additNumber) {
+    if (additNumber === '1') {
+      return priceAdditiveOne;
+    } else if (additNumber === '2') {
+      return priceAdditiveTwo;
+    } else if (additNumber === '3') {
+      return priceAdditiveThree;
+    }
+  }
 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("buttonDessert").addEventListener("click", function() {
-        document.getElementById("buttonCoffee").classList.remove("active");
-        document.getElementById("buttonTea").classList.remove("active");
-        document.getElementById("buttonDessert").classList.toggle("active");
-        document.getElementById("backImg-3").classList.toggle("active");
-        document.getElementById("backImg-1").classList.remove("active");
-        document.getElementById("backImg-2").classList.remove("active");
-        // Удаление класса tea и добавление dessert
-        document.getElementById("card-1").classList.remove("tea");
-        document.getElementById("card-2").classList.remove("tea");
-        document.getElementById("card-3").classList.remove("tea");
-        document.getElementById("card-4").classList.remove("tea");
-        document.getElementById("card-5").classList.remove("tea");
-        document.getElementById("card-6").classList.remove("tea");
-        document.getElementById("card-7").classList.remove("tea");
-        document.getElementById("card-8").classList.remove("tea");
-        document.getElementById("card-1").classList.add("dessert");
-        document.getElementById("card-2").classList.add("dessert");
-        document.getElementById("card-3").classList.add("dessert");
-        document.getElementById("card-4").classList.add("dessert");
-        document.getElementById("card-5").classList.add("dessert");
-        document.getElementById("card-6").classList.add("dessert");
-        document.getElementById("card-7").classList.add("dessert");
-        document.getElementById("card-8").classList.add("dessert");
-
-        // Изменяем техт в карточках
-        cardName1.textContent = "Marble cheesecake";
-        cardName2.textContent = "Red velvet";
-        cardName3.textContent = "Cheesecakes";
-        cardName4.textContent = "Creme brulee";
-        cardName5.textContent = "Pancakes";
-        cardName6.textContent = "Honey cake";
-        cardName7.textContent = "Chocolate cake";
-        cardName8.textContent = "Black forest";
-
-        cardText1.textContent = "Philadelphia cheese with lemon zest on a light sponge cake and red currant jam";
-        cardText2.textContent = "Layer cake with cream cheese frosting";
-        cardText3.textContent = "Soft cottage cheese pancakes with sour cream and fresh berries and sprinkled with powdered sugar";
-        cardText4.textContent = "Delicate creamy dessert in a caramel basket with wild berries";
-        cardText5.textContent = "Tender pancakes with strawberry jam and fresh strawberries";
-        cardText6.textContent = "Classic honey cake with delicate custard";
-        cardText7.textContent = "Cake with hot chocolate filling and nuts with dried apricots";
-        cardText8.textContent = "A combination of thin sponge cake with cherry jam and light chocolate mousse";
-
-        carPrice1.textContent = "$3.50";
-        carPrice2.textContent = "$4.00";
-        carPrice3.textContent = "$4.50";
-        carPrice4.textContent = "$4.00";
-        carPrice5.textContent = "$4.50";
-        carPrice6.textContent = "$4.50";
-        carPrice7.textContent = "$5.50";
-        carPrice8.textContent = "$6.50";
+  modalBtnsSizes.forEach((btnSize) => {
+    btnSize.addEventListener('click', () => {
+      deleteActiveBtnSize();
+      changePrice('-', startModalCost); // удаляет разницу последнего выбранного товара
+      btnSize.classList.add('active');
+      btnSize.childNodes[1].classList.add('active');
+      const addPrice = addPriceToTotale(btnSize.childNodes[1].innerText); // возвращает сумму которую нужно добавить к цене при изменеии обьема стакана
+      startModalCost = addPrice; // сохраняем в переменную последнюю разницу
+      changePrice('+', +addPrice); // изменяем прайс
     });
+  });
+
+  function deleteActiveBtnSize() {
+    modalBtnsSizes.forEach((btnSize) => {
+      btnSize.classList.remove('active');
+      btnSize.childNodes[1].classList.remove('active');
+    });
+  }
+
+  function addPriceToTotale(size) {
+    if (size === 'S') {
+      return priceSizeSmall;
+    } else if (size === 'M') {
+      return priceSizeMedium;
+    } else if (size === 'L') {
+      return priceSizeLarge;
+    }
+  }
+}
+
+function changePrice(action = '+', number) {
+  const totalPrice = document.querySelector('.total-price');
+  let cost = totalPrice.innerText.replace(/[$]/g, '');
+  if (action === '+') {
+    cost = +cost + number;
+  } else {
+    cost = +cost - number;
+  }
+
+  if (cost.toString().includes('.')) {
+    if (cost.toString().split('.')[1].length === 1) {
+      cost = cost + '0';
+    }
+  } else {
+    cost = cost + '.00';
+  }
+
+  totalPrice.innerText = `$${cost}`;
+}
+
+// Закрытие модального окна при нажатии на затемнение
+
+const closeShadow = document.querySelector('.modal__wrapper');
+closeShadow.addEventListener('click', (event) => {
+  // Проверяет на тот ли я элемент нажал!
+  if (event.target.classList.contains('modal__wrapper')) {
+    closeModal();
+    const modalWrapper = document.querySelector('.modal__wrapper');
+    modalWrapper.innerHTML = '';
+  }
 });
-
-
-
-
-
-
