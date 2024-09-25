@@ -210,15 +210,15 @@ function createModal(title, array) {
               Additives
             </p>
             <div class="window__button-box">
-              <button class="modal__button">
+              <button class="modal__button btn-addit">
                 <p class="modal__button-icon ">1</p>
                ${additiveOne}
               </button>
-              <button class="modal__button">
+              <button class="modal__button btn-addit">
                 <p class="modal__button-icon ">2</p>
                 ${additiveTwo}
               </button>
-              <button class="modal__button">
+              <button class="modal__button btn-addit">
                 <p class="modal__button-icon ">3</p>
                 ${additiveThree}
               </button>
@@ -254,15 +254,51 @@ function createModal(title, array) {
 
   // кнопки модального окна
   const modalBtnsSizes = document.querySelectorAll('.btn-size');
+  const modalBtnsAdditives = document.querySelectorAll('.btn-addit');
+  let isFirstAddit = false;
+  let isSecondAddit = false;
+  let isThirdAddit = false;
 
-  // modalBtnsSizes.forEach((btnSize) => {
-  //   btnSize.classList.remove('active');
-  //   btnSize.childNodes[1].classList.remove('active');
-  //   btnSize.addEventListener('click', () => {
-  //     btnSize.classList.add('active');
-  //     btnSize.childNodes[1].classList.add('active');
-  //   });
-  // });
+  modalBtnsAdditives.forEach((btnAddit) => {
+    btnAddit.addEventListener('click', () => {
+      btnAddit.classList.toggle('active');
+      btnAddit.childNodes[1].classList.toggle('active');
+      let numberBtn = btnAddit.childNodes[1].innerText;
+      const additivePrice = addAdditivesPrice(numberBtn);
+      if (numberBtn === '1') {
+        if (!isFirstAddit) {
+          changePrice('+', +additivePrice); // изменяем прайс
+        } else {
+          changePrice('-', +additivePrice); // изменяем прайс
+        }
+        isFirstAddit = !isFirstAddit;
+      } else if (numberBtn === '2') {
+        if (!isSecondAddit) {
+          changePrice('+', +additivePrice); // изменяем прайс
+        } else {
+          changePrice('-', +additivePrice); // изменяем прайс
+        }
+        isSecondAddit = !isSecondAddit;
+      } else if (numberBtn === '3') {
+        if (!isThirdAddit) {
+          changePrice('+', +additivePrice); // изменяем прайс
+        } else {
+          changePrice('', +additivePrice); // изменяем прайс
+        }
+        isThirdAddit = !isThirdAddit;
+      }
+    });
+  });
+
+  function addAdditivesPrice(additNumber) {
+    if (additNumber === '1') {
+      return priceAdditiveOne;
+    } else if (additNumber === '2') {
+      return priceAdditiveTwo;
+    } else if (additNumber === '3') {
+      return priceAdditiveThree;
+    }
+  }
 
   modalBtnsSizes.forEach((btnSize) => {
     btnSize.addEventListener('click', () => {
